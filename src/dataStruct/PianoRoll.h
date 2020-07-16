@@ -2,8 +2,8 @@
 // Created by admin1 on 2020/7/7.
 //
 
-#ifndef MSTT_PIANOROLLL_H
-#define MSTT_PIANOROLLL_H
+#ifndef MSTT_PIANOROLL_H
+#define MSTT_PIANOROLL_H
 
 #include <vector>
 #include <iostream>
@@ -14,12 +14,12 @@
 
 using namespace std;
 
-class pianoRolll {
+class pianoRoll {
 public:
-    pianoRolll(vector<vector<int>> &onset, vector<vector<int>> &frame) : onset(onset), frame(frame) {}
+    pianoRoll(vector<vector<int>> &onset, vector<vector<int>> &frame) : onset(onset), frame(frame) {}
 
-    pianoRolll(vector<vector<float>> &raw_onset, vector<vector<float>> &raw_frame) : onset(raw2binary(raw_onset)),
-                                                                                     frame(raw2binary(raw_frame)) {}
+    pianoRoll(vector<vector<float>> &raw_onset, vector<vector<float>> &raw_frame) : onset(raw2binary(raw_onset)),
+                                                                                    frame(raw2binary(raw_frame)) {}
 
     vector<vector<int>> onset; // (t, 88)
     vector<vector<int>> frame;
@@ -36,4 +36,4 @@ private:
 
 vector<vector<float>> readArrayFromeFile(const string&);
 
-#endif //MSTT_PIANOROLLL_H
+#endif //MSTT_PIANOROLL_H

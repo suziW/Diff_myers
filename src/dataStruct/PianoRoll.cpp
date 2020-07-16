@@ -2,10 +2,10 @@
 // Created by admin1 on 2020/7/7.
 //
 
-#include "PianoRolll.h"
+#include "PianoRoll.h"
 
 
-vector<vector<int>> pianoRolll::raw2binary(vector<vector<float>>& array, float threshold) {
+vector<vector<int>> pianoRoll::raw2binary(vector<vector<float>>& array, float threshold) {
     vector<vector<int>> arr;
     vector<int> line;
     for (auto & f : array){
@@ -18,7 +18,7 @@ vector<vector<int>> pianoRolll::raw2binary(vector<vector<float>>& array, float t
     return arr;
 }
 
-vector<note> pianoRolll::noteSequence() {
+vector<note> pianoRoll::noteSequence() {
     frame.emplace_back(NUM_PITCHES, 0);
     onset.emplace_back(NUM_PITCHES, 0);
 
@@ -58,7 +58,7 @@ vector<note> pianoRolll::noteSequence() {
     return ns;
 }
 
-//void pianoRolll::check() {
+//void pianoRoll::check() {
 //    if (frame.size() != onset.size() or frame[0].size() != NUM_PITCHES or onset[0].size() != NUM_PITCHES) {
 //        throw "onset or frame with wrong size!";
 //    }

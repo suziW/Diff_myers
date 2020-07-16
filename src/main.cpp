@@ -9,7 +9,7 @@
 #include "dataStruct/Note.h"
 #include "json.hpp"
 #include "config.h"
-#include "dataStruct/PianoRolll.h"
+#include "dataStruct/PianoRoll.h"
 #include "cmp/Analyze.h"
 
 using namespace std;

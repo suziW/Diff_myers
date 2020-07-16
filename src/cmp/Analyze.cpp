@@ -5,7 +5,7 @@
 #include "Analyze.h"
 
 string analyze(vector<vector<float>> onset, vector<vector<float>> frame, const string &file) {
-    pianoRolll piano_roll(onset, frame);
+    pianoRoll piano_roll(onset, frame);
 
     // est ns get from piano roll
     vector<note> est_ns = piano_roll.noteSequence();

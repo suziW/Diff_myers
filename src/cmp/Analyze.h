@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "dataStruct/PianoRolll.h"
+#include "dataStruct/PianoRoll.h"
 #include "Myers.hcc"
 
 using namespace std;
