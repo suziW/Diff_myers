@@ -14,6 +14,11 @@ bool note::operator==(const note &n) const {
     return pitch == n.pitch;
 }
 
+string note::get_notation() {
+    notation = PITCH2NOTATION.at(pitch);
+    return notation;
+}
+
 void to_json(json &j, const note &n) {
     j = json{{"pitch", n.pitch},
              {"start_time", n.start_time},
@@ -25,6 +30,7 @@ void to_json(json &j, const note &n) {
              {"speed", n.speed},
              {"status" , n.status},
              {"rhythm", n.rhythm},
+             {"match_id", n.match_id},
              {"notation", n.notation}};
 }
 
@@ -42,6 +48,7 @@ void from_json(const json &j, note &n) {
         j.at("speed").get_to(n.speed);
         j.at("status").get_to(n.status);
         j.at("rhythm").get_to(n.rhythm);
+        j.at("match_id").get_to(n.match_id);
         j.at("notation").get_to(n.notation);
     } catch (nlohmann::detail::out_of_range &e) {
     }

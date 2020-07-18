@@ -9,6 +9,7 @@
 #include <cmath>
 #include <iostream>
 #include "json.hpp"
+#include "config.h"
 
 using namespace std;
 using json = nlohmann::json;
@@ -33,11 +34,13 @@ public:
     float speed = 100;
     int status = -1; //0:correct, 1:lost, 2:addition
     int rhythm = -1;
+    int match_id = -1;
     string notation = "-1";
 
     friend ostream &operator<<(ostream &, const note &);
 
     bool operator==(const note &) const;
+    string get_notation();
 };
 
 void to_json(json &, const note &);

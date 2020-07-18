@@ -20,8 +20,8 @@ public:
 
     virtual ~Myers() = default; // 防止内存泄漏
 
-    vector<T>& a; // ground truth
-    vector<T>& b; // estimate
+    vector<T> &a; // ground truth
+    vector<T> &b; // estimate
     vector<vector<int>> trace;
     vector<coord> traceCoords;
     vector<int> aDiff;
@@ -94,7 +94,7 @@ void MyersStandard<T>::shortest_edit() {
 
 template<class T>
 void MyersStandard<T>::backtrack() {
-    cout << "in backtrack implementation "<< endl;
+    cout << "in backtrack implementation " << endl;
     int x = this->a.size();
     int y = this->b.size();
     int k;
@@ -130,23 +130,38 @@ void MyersStandard<T>::diff() {
         if ((*i).x == (*(i + 1)).x) {
             this->bDiff.emplace_back((*i).y);
             cout << GREEN << "+++ " << at(this->b, this->bDiff.back()) << endl;
-            if (typeid(T) == typeid(note)){
-                this->b[(*i).y].status = 2;
-                this->b[(*i).y].osmd_id = this->a[(*i).x].osmd_id;
-            }
         } else if ((*i).y == (*(i + 1)).y) {
             this->aDiff.emplace_back((*i).x);
             cout << RED << "--- " << at(this->a, this->aDiff.back()) << endl;
-            if (typeid(T) == typeid(note)){
-                this->a[(*i).x].status = 1;
-            }
         } else {
             this->match.emplace_back(*i);
             cout << RESET << "    " << at(this->a, this->match.back().x) << endl;
-            if (typeid(T) == typeid(note)){
-                this->a[(*i).x].status = 0;
-                this->a[(*i).x].rhythm = 0;
-            }
+        }
+    }
+}
+
+template<>
+inline void MyersStandard<note>::diff() {
+    cout << "in diff implementation" << endl;
+    for (auto i = this->traceCoords.rbegin(); i != this->traceCoords.rend() - 1; i++) {
+        if ((*i).x == (*(i + 1)).x) {
+            this->bDiff.emplace_back((*i).y);
+            cout << GREEN << "+++ " << at(this->b, this->bDiff.back()) << endl;
+            this->b[(*i).y].status = 2;
+            this->b[(*i).y].osmd_id = this->a[(*i).x].osmd_id;
+        } else if ((*i).y == (*(i + 1)).y) {
+            this->aDiff.emplace_back((*i).x);
+            cout << RED << "--- " << at(this->a, this->aDiff.back())  << endl;
+            this->a[(*i).x].status = 1;
+        } else {
+            this->match.emplace_back(*i);
+            cout << RESET << "    " << at(this->a, this->match.back().x) << endl;
+            this->a[(*i).x].status = 0;
+            this->a[(*i).x].rhythm = 0;
+            this->a[(*i).x].match_id = (*i).y;
+            this->b[(*i).y].status = 0;
+            this->b[(*i).y].rhythm = 0;
+            this->b[(*i).y].match_id = (*i).x;
         }
     }
 }

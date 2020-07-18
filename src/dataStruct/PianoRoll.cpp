@@ -37,6 +37,7 @@ vector<note> pianoRoll::noteSequence() {
                         n.pitch = p + MIN_PITCH;
                         n.start_time = pitch_start_step[p] * SECONDS_PER_FRAME;
                         n.duration = f * SECONDS_PER_FRAME - n.start_time;
+                        n.id = ns.size();
                         ns.emplace_back(n);
                         // 开始新的note
                         pitch_start_step[p] = f;
@@ -50,6 +51,7 @@ vector<note> pianoRoll::noteSequence() {
                 n.pitch = p + MIN_PITCH;
                 n.start_time = pitch_start_step[p] * SECONDS_PER_FRAME;
                 n.duration = f * SECONDS_PER_FRAME - n.start_time;
+                n.id = ns.size();
                 ns.emplace_back(n);
                 pitch_start_step.erase(p);
             }
