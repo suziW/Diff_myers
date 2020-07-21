@@ -10,6 +10,7 @@
 #include "config.h"
 #include "dataStruct/Coord.h"
 #include "dataStruct/Note.h"
+#include "plot/IntoMyers.h"
 
 using namespace std;
 
@@ -41,13 +42,16 @@ template<class T>
 class MyersStandard : public Myers<T> {
 public:
 //    using Myers<T>::Myers;
-    MyersStandard(vector<T> &a, vector<T> &b) : Myers<T>(a, b) {
+    MyersStandard(vector<T> &a, vector<T> &b, IntoMyers *plot = nullptr) : Myers<T>(a, b), plot(plot) {
         shortest_edit();
         backtrack();
         diff();
     }
 
 private:
+    IntoMyers *plot;
+    string plotInfo;
+
     void shortest_edit() override;
 
     void backtrack() override;
@@ -76,14 +80,26 @@ void MyersStandard<T>::shortest_edit() {
         this->trace.emplace_back(v);
         for (k = -d; k <= d; k += 2) {
             if (k == -d or (k != d and at(v, k - 1) < at(v, k + 1))) {
-                x = at(v, k + 1);
+                x = at(v, k + 1); // Moving downward
+                if (plot) {
+                    plotInfo = "downward: d, k = " + to_string(d) + ", " + to_string(k);
+                    plot->next(coord(x, x - k - 1), coord(x, x - k), plotInfo);
+                }
             } else {
-                x = at(v, k - 1) + 1;
+                x = at(v, k - 1) + 1; // Moving rightward
+                if (plot) {
+                    plotInfo = "rightward: d, k = " + to_string(d) + ", " + to_string(k);
+                    plot->next(coord(x - 1, x - 1 - k + 1), coord(x, x - k), plotInfo);
+                }
             }
             y = x - k;
 
             while (x < n and y < m and this->a[x] == this->b[y]) {
-                x = x + 1, y = y + 1;
+                x = x + 1, y = y + 1; // Moving diagonally
+                if (plot) {
+                    plotInfo = "diagonally: d, k = " + to_string(d) + ", " + to_string(k);
+                    plot->next(coord(x - 1, y - 1), coord(x, y), plotInfo);
+                }
             }
 
             at(v, k) = x; //更新v,各个路径的x坐标
@@ -151,7 +167,7 @@ inline void MyersStandard<note>::diff() {
             this->b[(*i).y].osmd_id = this->a[(*i).x].osmd_id;
         } else if ((*i).y == (*(i + 1)).y) {
             this->aDiff.emplace_back((*i).x);
-            cout << RED << "--- " << at(this->a, this->aDiff.back())  << endl;
+            cout << RED << "--- " << at(this->a, this->aDiff.back()) << endl;
             this->a[(*i).x].status = 1;
         } else {
             this->match.emplace_back(*i);
