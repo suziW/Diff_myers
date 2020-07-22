@@ -59,7 +59,7 @@ private:
     void diff() override;
 };
 
-// support negtive index
+// support negative index
 template<typename T>
 inline T &at(vector<T> &a, int i) {
     return i < 0 ? a.at(i + a.size()) : a.at(i);
@@ -164,7 +164,7 @@ inline void MyersStandard<note>::diff() {
             this->bDiff.emplace_back((*i).y);
             cout << GREEN << "+++ " << at(this->b, this->bDiff.back()) << endl;
             this->b[(*i).y].status = 2;
-            this->b[(*i).y].osmd_id = this->a[(*i).x].osmd_id;
+            this->b[(*i).y].osmd_id = this->a[max((*i).x - 1, 0)].osmd_id;
         } else if ((*i).y == (*(i + 1)).y) {
             this->aDiff.emplace_back((*i).x);
             cout << RED << "--- " << at(this->a, this->aDiff.back()) << endl;
@@ -182,5 +182,9 @@ inline void MyersStandard<note>::diff() {
     }
 }
 
+class MyersMultiMatch : public MyersStandard<note> {
+public:
+    MyersMultiMatch(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersStandard<note>(a, b, plot) {}
+};
 
 #endif //MSTT_MYERS_HCC

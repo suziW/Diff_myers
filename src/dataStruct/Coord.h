@@ -5,6 +5,9 @@
 #ifndef MSTT_COORD_H
 #define MSTT_COORD_H
 
+#include <iostream>
+
+using namespace std;
 
 class coord {
 public:
@@ -14,6 +17,7 @@ public:
     int y;
 //    int &a = x;
 //    int &b = y;
+    friend ostream &operator<<(ostream &, coord &);
 };
 
 

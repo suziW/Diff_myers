@@ -37,15 +37,21 @@ public:
     int match_id = -1;
     string notation = "-1";
 
-    friend ostream &operator<<(ostream &, const note &);
+    friend ostream &operator<<(ostream &, note &);
 
     bool operator==(const note &) const;
+
     string get_notation();
 };
+
+bool noteAscendingCmp(note &n1, note &n2);
+
+void nsAscendingSort(vector<note>&);
 
 void to_json(json &, const note &);
 
 void from_json(const json &, note &);
 
 vector<note> parseArray();
+
 #endif //MSTT_NOTE_H

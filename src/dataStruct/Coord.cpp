@@ -3,3 +3,8 @@
 //
 
 #include "Coord.h"
+
+ostream &operator<<(ostream &output, coord &c) {
+    output << "coord: x=" << c.x << ", y=" << c.y << "; ";
+    return output;
+}

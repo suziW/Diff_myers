@@ -9,7 +9,7 @@
 #include <vector>
 #include <fstream>
 #include "dataStruct/PianoRoll.h"
-#include "Myers.hcc"
+#include "Myers.hpp"
 
 using namespace std;
 
