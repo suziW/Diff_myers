@@ -15,10 +15,18 @@ public:
 
     int x;
     int y;
+
 //    int &a = x;
 //    int &b = y;
     friend ostream &operator<<(ostream &, coord &);
+
+    bool horizontal_with(coord &n) const;
+
+    bool vertical_with(coord &n) const;
+
+    bool diagonal_with(coord &n) const;
 };
 
+string to_string(coord &c);
 
 #endif //MSTT_COORD_H

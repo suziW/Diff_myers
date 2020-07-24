@@ -11,6 +11,8 @@
 #include "dataStruct/Coord.h"
 #include "dataStruct/Note.h"
 #include "plot/IntoMyers.h"
+#include "utils/utils.hpp"
+#include "dataStruct/Tree.h"
 
 using namespace std;
 
@@ -42,28 +44,20 @@ template<class T>
 class MyersStandard : public Myers<T> {
 public:
 //    using Myers<T>::Myers;
-    MyersStandard(vector<T> &a, vector<T> &b, IntoMyers *plot = nullptr) : Myers<T>(a, b), plot(plot) {
-        shortest_edit();
-        backtrack();
-        diff();
-    }
-
-private:
-    IntoMyers *plot;
-    string plotInfo;
+    MyersStandard(vector<T> &a, vector<T> &b, IntoMyers *plot = nullptr) : Myers<T>(a, b), plot(plot) {}
 
     void shortest_edit() override;
 
+    void diff() override;
+
+    IntoMyers *plot;
+    string plotInfo = " ";
+private:
     void backtrack() override;
 
-    void diff() override;
+    vector<vector<int>> trace;
+    vector<coord> traceCoords;
 };
-
-// support negative index
-template<typename T>
-inline T &at(vector<T> &a, int i) {
-    return i < 0 ? a.at(i + a.size()) : a.at(i);
-}
 
 template<class T>
 void MyersStandard<T>::shortest_edit() {
@@ -142,6 +136,9 @@ void MyersStandard<T>::backtrack() {
 template<class T>
 void MyersStandard<T>::diff() {
     cout << "in diff implementation" << endl;
+    shortest_edit();
+    backtrack();
+
     for (auto i = this->traceCoords.rbegin(); i != this->traceCoords.rend() - 1; i++) {
         if ((*i).x == (*(i + 1)).x) {
             this->bDiff.emplace_back((*i).y);
@@ -159,6 +156,9 @@ void MyersStandard<T>::diff() {
 template<>
 inline void MyersStandard<note>::diff() {
     cout << "in diff implementation" << endl;
+    shortest_edit();
+    backtrack();
+
     for (auto i = this->traceCoords.rbegin(); i != this->traceCoords.rend() - 1; i++) {
         if ((*i).x == (*(i + 1)).x) {
             this->bDiff.emplace_back((*i).y);
@@ -182,9 +182,18 @@ inline void MyersStandard<note>::diff() {
     }
 }
 
-class MyersMultiMatch : public MyersStandard<note> {
+class MyersTree : public MyersStandard<note> {
 public:
-    MyersMultiMatch(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersStandard<note>(a, b, plot) {}
+    MyersTree(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersStandard<note>(a, b, plot) {
+    }
+
+    void shortest_edit() override;
+
+    void diff() override;
+
+    void inspect();
+
+    tree tr;
 };
 
 #endif //MSTT_MYERS_HCC

@@ -43,10 +43,12 @@ int main() {
     vector<note> ref_ns_cut(ref_ns.begin(), ref_ns.end());
 
     // cmp
-    IntoMyers into(ref_ns_cut, est_ns_cut, 0.24);
-    MyersStandard<note> myers(ref_ns_cut, est_ns_cut, &into);
-    into.trace(myers.traceCoords);
-    PlotCmp plot(ref_ns_cut, est_ns_cut, 0, 0.8);
+    IntoMyers into(ref_ns_cut, est_ns_cut, 0.23);
+    MyersTree myers(ref_ns_cut, est_ns_cut, &into);
+//    MyersStandard<note> myers(ref_ns_cut, est_ns_cut,&into);
+    myers.diff();
+//    into.plot_final_path(myers.traceCoords);
+//    PlotCmp plot(ref_ns_cut, est_ns_cut, 0, 0.8);
     cout << ref_ns.size() << "::" << est_ns.size() << endl;
 
 //    const char a[] = "ABAB";
@@ -56,4 +58,4 @@ int main() {
 //    IntoMyers plot(a_, b_, 1);
 //    MyersStandard<char> myers(a_, b_, &plot);
 //    plot.trace(myers.traceCoords);
- }
+}

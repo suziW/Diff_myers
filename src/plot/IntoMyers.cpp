@@ -77,12 +77,16 @@ void IntoMyers::renderText() {
     SDL_RenderCopy(renderer, texture, nullptr, &textSquare);
 }
 
-void IntoMyers::renderGrid(string info) {
+void IntoMyers::renderGrid() {
     // 背景render
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer);
 
-    // grid render
+    // render info
+    textSquare = {0, 0, 0, 0};
+    renderText();
+
+    // render grid
     for (int i = 0; i < a.size(); i++) {
         renderLine(coord(i, 0), coord(i, b.size()));
         text = a.at(i);
@@ -105,9 +109,9 @@ void IntoMyers::renderGrid(string info) {
         renderLine(i, coord(i.x + 1, i.y + 1), 1, 0, 255, 0);
     }
 
-    // render paths
+    // render short paths for standard myers
     int k = -1; // init
-    for (auto i = paths.rbegin(); i != paths.rend(); i++) {
+    for (auto i = short_paths.rbegin(); i != short_paths.rend(); i++) {
         if (k == -1) {
             k = ((*i).second.x - (*i).second.y) & 1; // set odd even
         } else if (k != -2 and k != (((*i).second.x - (*i).second.y) & 1)) { // if odd even changed
@@ -121,38 +125,47 @@ void IntoMyers::renderGrid(string info) {
         }
     }
 
-    // render final trace
-    for (auto i = final_trace.begin(); i != final_trace.end(); i++) {
-        if (i+1 == final_trace.end()){ break;}
-        renderLine((*i), (*(i + 1)), 2, 0, 255, 0);
+    // render final path
+    if (final_path) {
+        for (auto i = final_path->begin(); i != final_path->end(); i++) {
+            if (i + 1 == final_path->end()) { break; }
+            renderLine((*i), (*(i + 1)), 2, 0, 255, 0);
+        }
     }
 
-    // render info
-    text = move(info);
-    textSquare = {0, 0, 0, 0};
-    renderText();
+    // render tree
+    if (tr) {
+        for (auto &i: tr->all_nodes) {
+            if (i.parent) {
+                if (i.d == tr->current_d) {
+                    renderLine(i.parent->c, i.c, 2, 255, 0, 0);
+                } else {
+                    renderLine(i.parent->c, i.c, 2, 0, 0, 255);
+                }
+            }
+        }
+        // color current route
+//        treeNode *current_node = &tr->all_nodes.back();
+//        while (current_node->parent){
+//            cout << current_node->parent->c << current_node->c << endl;
+//            renderLine(current_node->parent->c, current_node->c, 2, 255, 255, 0);
+//            current_node = current_node->parent;
+//        }
+    }
 
     // render
     SDL_RenderPresent(renderer);
 }
 
 void IntoMyers::next(coord c1, coord c2, const string &info) {
-    bool reRender = false;
-    SDL_Event e;
-    while (!quit) {
-        while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
-                quit = true;
-            } else if (e.type == SDL_KEYDOWN) {
-                paths.emplace_back(c1, c2);
-                renderGrid(info);
-                reRender = true;
-            }
-        }
-        if (reRender) {
-            break; // break, so go to next loop, show next line.
-        }
-    }
+    short_paths.emplace_back(c1, c2);
+    text = info;
+    renderGrid();
+}
+
+void IntoMyers::plot_final_path(vector<coord> &path) {
+    final_path = &path;
+    renderGrid();
 }
 
 void IntoMyers::close() {
@@ -165,10 +178,24 @@ void IntoMyers::close() {
     SDL_Quit();
 }
 
-void IntoMyers::trace(vector<coord> &traceCoords) {
-    final_trace = traceCoords;
-    renderGrid();
+void IntoMyers::block() {
+    bool reRender = false;
+    SDL_Event e;
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            } else if (e.type == SDL_KEYDOWN) {
+                reRender = true;
+            }
+        }
+        if (reRender) {
+            break; // break skip out of block .
+        }
+    }
+}
 
+void IntoMyers::trueBlock() {
     SDL_Event e;
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
@@ -177,4 +204,10 @@ void IntoMyers::trace(vector<coord> &traceCoords) {
             }
         }
     }
+}
+
+void IntoMyers::plot_tree(tree &tree, const string &info) {
+    tr = &tree;
+    text = info;
+    renderGrid();
 }

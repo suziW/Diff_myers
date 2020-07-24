@@ -14,6 +14,7 @@
 #include <cstdio>
 #include "dataStruct/Coord.h"
 #include "dataStruct/Note.h"
+#include "dataStruct/Tree.h"
 
 
 class IntoMyers {
@@ -28,14 +29,21 @@ public:
 
     void init();
 
-    void renderLine(coord, coord, Uint8 w=1, Uint8 r=0, Uint8 g=0, Uint8 b=0);
+    void renderLine(coord, coord, Uint8 w = 1, Uint8 r = 0, Uint8 g = 0, Uint8 b = 0);
 
     void renderText();
 
-    void renderGrid(string info = "press any key to continue!");
+    void renderGrid();
+
+    void block();
+
+    void trueBlock();
 
     void next(coord, coord, const string &);
-    void trace(vector<coord> &);
+
+    void plot_final_path(vector<coord> &);
+
+    void plot_tree(tree &, const string &);
 
     void close();
 
@@ -50,7 +58,7 @@ private:
     SDL_Texture *texture = nullptr;
 
     // text setting
-    string text = "hello world";
+    string text = "press any key to continue!";
     int fontSize = 20;
     SDL_Color textColor = {0, 0, 0, 0xFF};
     SDL_Rect textSquare = {0, 0, 0, 0};
@@ -62,9 +70,10 @@ private:
     int side_length = 50;
     vector<string> a;
     vector<string> b;
-    vector<pair<coord, coord>> paths;
     vector<coord> diagonal;
-    vector<coord> final_trace;
+    vector<pair<coord, coord>> short_paths;
+    vector<coord> *final_path = nullptr;
+    tree *tr = nullptr;
 };
 
 
