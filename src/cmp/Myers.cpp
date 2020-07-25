@@ -5,13 +5,12 @@
 #include "Myers.hpp"
 
 void MyersTree::shortest_edit() {
-    cout << "in shortest_edit implementation" << endl;
     int x = 0;
     int y = -1;
     int d = -1;
     int k = 1;
-    int n = this->a.size();
-    int m = this->b.size();
+    int n = a.size();
+    int m = b.size();
     int maxd = m + n;
 
     tr.init(2 * maxd + 1, treeNode(coord(x, y), d, k));
@@ -32,21 +31,19 @@ void MyersTree::shortest_edit() {
                 inspect();
             }
 
-            while (x < n and y < m and this->a[x] == this->b[y]) {
+            while (x < n and y < m and a[x] == b[y]) {
                 x = x + 1, y = y + 1; // Moving diagonally
                 tr.emplace_back(treeNode(coord(x, y), d, k), k);
                 plotInfo = "diagonally: d, k = " + to_string(d) + ", " + to_string(k);
                 inspect();
             }
 
-            if (x >= n and y >= m) return; // TODO: 如果不要求a\b匹配完，或者只要求b走完,或者给b一个earlystop
+            if (x >= n and y >= m) return;
         }
     }
 }
 
 void MyersTree::diff() {
-    shortest_edit();
-
     treeNode *current_node = &tr.all_nodes.back();
     while (current_node->parent != tr.root) {
         if (current_node->c.horizontal_with(current_node->parent->c)) {
@@ -63,15 +60,18 @@ void MyersTree::diff() {
             cout << RESET << "    " << a.at(match.back().x) << endl;
             a.at(match.back().x).status = 0;
             a.at(match.back().x).rhythm = 0;
-            a.at(match.back().x).match_id = match.back().y;
+            a.at(match.back().x).match_id = b.at(match.back().y).id;
             b.at(match.back().y).status = 0;
             b.at(match.back().y).rhythm = 0;
-            b.at(match.back().y).match_id = match.back().x;
+            b.at(match.back().y).match_id = a.at(match.back().x).id;
         }
         current_node = current_node->parent;
     }
+}
 
-    plot->trueBlock();
+void MyersTree::process() {
+    shortest_edit();
+    diff();
 }
 
 void MyersTree::inspect() {
@@ -79,4 +79,87 @@ void MyersTree::inspect() {
         plot->block();
         plot->plot_tree(tr, plotInfo);
     }
+}
+
+
+void MyersOverlapPoll::shortest_edit() {
+    int x = 0;
+    int y = -1;
+    int d = -1;
+    int k = 1;
+    int n = a.size();
+    int m = b.size();
+    int maxd = m + n;
+
+    tr.init(2 * maxd + 1, treeNode(coord(x, y), d, k));
+    for (d = 0; d <= maxd; d++) {
+        tr.current_d = d;
+        for (k = -d; k <= d; k += 2) {
+            if (k == -d or (k != d and tr.get_k_leave_x(k - 1) < tr.get_k_leave_x(k + 1))) {
+                x = tr.get_k_leave_x(k + 1);
+                y = x - k;
+                tr.emplace_back(treeNode(coord(x, y), d, k), k + 1);
+                plotInfo = "downward: d, k = " + to_string(d) + ", " + to_string(k);
+                inspect();
+            } else {
+                x = tr.get_k_leave_x(k - 1) + 1;
+                y = x - k;
+                tr.emplace_back(treeNode(coord(x, y), d, k), k - 1);
+                plotInfo = "rightward: d, k = " + to_string(d) + ", " + to_string(k);
+                inspect();
+            }
+
+            while (x < n and y < m and is_match_in_poll(a[x], b[y])) {
+                x = x + 1, y = y + 1; // Moving diagonally
+                tr.emplace_back(treeNode(coord(x, y), d, k), k);
+                plotInfo = "diagonally: d, k = " + to_string(d) + ", " + to_string(k);
+                inspect();
+            }
+
+            if (x >= n and y >= m) return;
+        }
+    }
+}
+
+void MyersOverlapPoll::deoverlap() {
+    treeNode *current_node = &tr.all_nodes.back();
+    while (current_node->parent != tr.root) {
+        note &ax = a.at(current_node->parent->c.x);
+        note &by = b.at(current_node->parent->c.y);
+        if (current_node->c.diagonal_with(current_node->parent->c)) {
+            if (not (ax == by)) {
+                cout << "=====================================================" << endl;
+                cout << ax << by << endl;
+                for (auto i:overlap_pool[ax.start_time]) {
+                    if (*i == by) {
+                        cout << i << "==" << *i << "|||" << &ax << "==" << ax << endl;
+                        swap(*i, ax);
+                        cout << i << "==" << *i << "|||" << &ax << "==" << ax << endl;
+                        break;
+                    }
+                }
+            }
+        }
+        current_node = current_node->parent;
+    }
+}
+
+void MyersOverlapPoll::process() {
+    get_overlap_pool();
+    shortest_edit();
+    deoverlap();
+    diff();
+}
+
+void MyersOverlapPoll::get_overlap_pool() {
+    for (note &i:a) {
+        overlap_pool[i.start_time].emplace_back(&i);
+    }
+}
+
+bool MyersOverlapPoll::is_match_in_poll(note &ax, note &by) {
+    for (auto i:overlap_pool[ax.start_time]) {
+        if (i->pitch == by.pitch) { return true; }
+    }
+    return false;
 }

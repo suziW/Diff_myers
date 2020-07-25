@@ -10,15 +10,15 @@ ostream &operator<<(ostream &output, coord &c) {
 }
 
 bool coord::horizontal_with(coord &n) const {
-    return y==n.y;
+    return y == n.y;
 }
 
 bool coord::vertical_with(coord &n) const {
-    return x==n.x;
+    return x == n.x;
 }
 
 bool coord::diagonal_with(coord &n) const {
-    return (x == n.x + 1 and y == n.y + 1) or (x == n.x -1 and y == n.y -1);
+    return (x == n.x - 1 and y == n.y - 1) or (x == n.x + 1 and y == n.y + 1);
 }
 
 string to_string(coord &c) {

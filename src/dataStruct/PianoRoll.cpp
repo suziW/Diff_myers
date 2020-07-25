@@ -60,29 +60,3 @@ vector<note> pianoRoll::noteSequence() {
     return ns;
 }
 
-//void pianoRoll::check() {
-//    if (frame.size() != onset.size() or frame[0].size() != NUM_PITCHES or onset[0].size() != NUM_PITCHES) {
-//        throw "onset or frame with wrong size!";
-//    }
-//}
-
-vector<vector<float>> readArrayFromeFile(const string& file) {
-    vector<vector<float>> array;
-    ifstream i(file);
-    string line;
-    while (getline(i, line)) {
-        string::size_type start = 0;
-        string::size_type end = 0;
-        vector<float> frame;
-        float active = 0;
-
-        while (end != string::npos) {
-            end = line.find(' ', start);
-            active = stof(line.substr(start, end - start));
-            frame.emplace_back(active);
-            start = end + 1;
-        }
-        array.emplace_back(frame);
-    }
-    return array;
-}

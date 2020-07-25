@@ -8,10 +8,10 @@
 
 IntoMyers::IntoMyers(vector<note> &ref, vector<note> &est, float zoom) {
     for (auto &i: ref) {
-        a.emplace_back(to_string(a.size()) + "--" + i.get_notation());
+        a.emplace_back(to_string(i.id) + "-" + i.notation);
     }
     for (auto &i: est) {
-        b.emplace_back(to_string(b.size()) + "--" + i.get_notation());
+        b.emplace_back(to_string(i.id) + "-" + i.notation);
     }
     for (int i = 0; i < ref.size(); i++) {
         for (int j = 0; j < est.size(); j++) {

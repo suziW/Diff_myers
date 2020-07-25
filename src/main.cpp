@@ -4,7 +4,7 @@
 
 #include "cmp/Myers.hpp"
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <fstream>
 #include <iomanip>
 #include <SDL2/SDL.h>
@@ -32,7 +32,8 @@ int main() {
     pianoRoll piano_roll(onset, frame);
     vector<note> est_ns = piano_roll.noteSequence();
     nsAscendingSort(est_ns);
-    vector<note> est_ns_cut(est_ns.begin(), est_ns.end());
+    vector<note> est_ns_cut(est_ns.begin() + 12, est_ns.begin() + 32);
+//    vector<note> est_ns_cut = est_ns;
 
     // ref ns read from file
     json ref_json;
@@ -40,15 +41,15 @@ int main() {
     i >> ref_json;
     vector<note> ref_ns = ref_json["notes"].get<vector<note>>();
     nsAscendingSort(ref_ns);
-    vector<note> ref_ns_cut(ref_ns.begin(), ref_ns.end());
+    vector<note> ref_ns_cut(ref_ns.begin() + 7, ref_ns.begin() + 17);
+//    vector<note> ref_ns_cut = ref_ns;
 
     // cmp
-    IntoMyers into(ref_ns_cut, est_ns_cut, 0.23);
-    MyersTree myers(ref_ns_cut, est_ns_cut, &into);
-//    MyersStandard<note> myers(ref_ns_cut, est_ns_cut,&into);
-    myers.diff();
-//    into.plot_final_path(myers.traceCoords);
-//    PlotCmp plot(ref_ns_cut, est_ns_cut, 0, 0.8);
+    IntoMyers into(ref_ns_cut, est_ns_cut, 1);
+    MyersOverlapPoll myers(ref_ns_cut, est_ns_cut, &into);
+//    MyersTree myers(ref_ns_cut, est_ns_cut, &into);
+    myers.process();
+    PlotCmp plot(ref_ns_cut, est_ns_cut, 0, 1);
     cout << ref_ns.size() << "::" << est_ns.size() << endl;
 
 //    const char a[] = "ABAB";

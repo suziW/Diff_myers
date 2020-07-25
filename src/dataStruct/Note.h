@@ -8,6 +8,7 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+#include <unordered_map>
 #include "json.hpp"
 #include "config.h"
 
@@ -16,8 +17,7 @@ using json = nlohmann::json;
 
 class note {
 public:
-    explicit note(int pitch = -1, float start_time = -1) :
-            pitch(pitch), start_time(start_time) {}
+    explicit note(int pitch = -1, float start_time = -1) : pitch(pitch), start_time(start_time) {}
 
     int pitch;
     float start_time;
@@ -35,23 +35,19 @@ public:
     int status = -1; //0:correct, 1:lost, 2:addition
     int rhythm = -1;
     int match_id = -1;
-    string notation = "-1";
+    string notation = "";
 
     friend ostream &operator<<(ostream &, note &);
 
     bool operator==(const note &) const;
 
-    string get_notation();
+    void get_notation();
 };
-
-bool noteAscendingCmp(note &n1, note &n2);
-
-void nsAscendingSort(vector<note>&);
 
 void to_json(json &, const note &);
 
 void from_json(const json &, note &);
 
-vector<note> parseArray();
+string to_string(note &n);
 
 #endif //MSTT_NOTE_H

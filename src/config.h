@@ -6,6 +6,7 @@
 #define MSTT_CONFIG_H
 
 #include <map>
+#include <unordered_map>
 #include <string>
 
 //the following are UBUNTU/LINUX ONLY terminal color codes.
@@ -38,7 +39,7 @@ const int NUM_PITCHES = MAX_PITCH - MIN_PITCH + 1;
 
 
 // pitch to notation
-const std::map<int, std::string> PITCH2NOTATION = {
+const std::unordered_map<int, std::string> PITCH2NOTATION = {
         {21, "A2"},
         {22, "#A2"},
         {23, "B2"},

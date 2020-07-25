@@ -6,6 +6,9 @@
 #define MSTT_UTILS_HPP
 
 #include <vector>
+#include <fstream>
+#include "dataStruct/Note.h"
+
 using namespace std;
 
 // support negative index
@@ -13,5 +16,11 @@ template<typename T>
 inline T &at(vector<T> &a, int i) {
     return i < 0 ? a.at(i + a.size()) : a.at(i);
 }
+
+vector<vector<float>> readArrayFromeFile(const string &);
+
+bool noteAscendingCmp(note &n1, note &n2);
+
+void nsAscendingSort(vector<note> &ns);
 
 #endif //MSTT_UTILS_HPP

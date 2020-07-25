@@ -6,8 +6,7 @@
 
 
 ostream &operator<<(ostream &output, note &n) {
-    output << "notation:" << n.get_notation() << " pitch:" << n.pitch << " start_time:" << n.start_time << " id:"
-           << n.id;
+    output << to_string(n);
     return output;
 }
 
@@ -16,23 +15,9 @@ bool note::operator==(const note &n) const {
     return pitch == n.pitch;
 }
 
-string note::get_notation() {
-    notation = PITCH2NOTATION.at(pitch);
-    return notation;
-}
-
-bool noteAscendingCmp(note &n1, note &n2) {
-    if (n1.start_time < n2.start_time) {
-        return true;
-    } else if (n1.start_time > n2.start_time) {
-        return false;
-    } else { return n1.pitch < n2.pitch; }
-}
-
-void nsAscendingSort(vector<note> & ns) {
-    sort(ns.begin(), ns.end(), noteAscendingCmp);
-    for (int i=0; i<ns.size();i++){
-        ns[i].id = i;
+void note::get_notation() {
+    if (pitch != -1) {
+        notation = PITCH2NOTATION.at(pitch);
     }
 }
 
@@ -69,4 +54,17 @@ void from_json(const json &j, note &n) {
         j.at("notation").get_to(n.notation);
     } catch (nlohmann::detail::out_of_range &e) {
     }
+}
+
+string to_string(note &n) {
+    if (n.notation.empty()) {
+        n.get_notation();
+    }
+    return "notation:" + n.notation +
+           " pitch:" + to_string(n.pitch) +
+           " start_time:" + to_string(n.start_time) +
+           " id:" + to_string(n.id) +
+           " match_id:" + to_string(n.match_id) +
+           " status:" + to_string(n.status) +
+           ", ";
 }

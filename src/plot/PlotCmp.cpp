@@ -125,11 +125,9 @@ PlotCmp::~PlotCmp() {
 
 NotePlot::NotePlot(note &n, float shift_seconds, int y_base, float zoom) {
     x = (int) ((n.start_time + shift_seconds) * 100);
-    y = -(n.pitch - 20) * 5 + y_base;
+    y = -(n.pitch - MIN_PITCH + 1) * 5 + y_base;
     color_status = n.status;
-    info = "pitch: " + to_string(n.pitch) + "||start time: " + to_string(n.start_time) + "||status: " +
-           to_string(color_status) + "||id: " + to_string(n.id) + "||match id: " + to_string(n.match_id) +
-           "||notation: " + n.get_notation();
+    info = to_string(n);
     this->zoom(zoom, y_base);
 }
 

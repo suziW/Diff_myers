@@ -25,11 +25,11 @@ public:
 
     vector<T> &a; // ground truth
     vector<T> &b; // estimate
-    vector<vector<int>> trace;
-    vector<coord> traceCoords;
     vector<int> aDiff;
     vector<int> bDiff;
     vector<coord> match;
+    vector<vector<int>> trace;
+    vector<coord> traceCoords;
 
 public:
     virtual void shortest_edit() = 0;
@@ -37,6 +37,8 @@ public:
     virtual void backtrack() = 0;
 
     virtual void diff() = 0;
+
+    virtual void process() = 0;
 };
 
 
@@ -49,6 +51,8 @@ public:
     void shortest_edit() override;
 
     void diff() override;
+
+    void process() override;
 
     IntoMyers *plot;
     string plotInfo = " ";
@@ -156,8 +160,6 @@ void MyersStandard<T>::diff() {
 template<>
 inline void MyersStandard<note>::diff() {
     cout << "in diff implementation" << endl;
-    shortest_edit();
-    backtrack();
 
     for (auto i = this->traceCoords.rbegin(); i != this->traceCoords.rend() - 1; i++) {
         if ((*i).x == (*(i + 1)).x) {
@@ -182,6 +184,14 @@ inline void MyersStandard<note>::diff() {
     }
 }
 
+template<class T>
+void MyersStandard<T>::process() {
+    cout << "processing ..." << endl;
+    shortest_edit();
+    backtrack();
+    diff();
+}
+
 class MyersTree : public MyersStandard<note> {
 public:
     MyersTree(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersStandard<note>(a, b, plot) {
@@ -191,9 +201,28 @@ public:
 
     void diff() override;
 
+    void process() override;
+
     void inspect();
 
     tree tr;
+};
+
+class MyersOverlapPoll: public MyersTree {
+public:
+    MyersOverlapPoll(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersTree(a, b, plot) {}
+
+    void shortest_edit() override;
+
+    void deoverlap();
+
+    void process() override;
+
+    unordered_map<float, vector<note *>> overlap_pool;
+
+    void get_overlap_pool();
+
+    bool is_match_in_poll(note &ax, note &by);
 };
 
 #endif //MSTT_MYERS_HCC
