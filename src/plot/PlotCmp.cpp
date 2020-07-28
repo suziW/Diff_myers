@@ -1,5 +1,6 @@
 //
 
+#ifdef PLOT
 #include "PlotCmp.h"
 
 PlotCmp::PlotCmp(vector<note> &ref, vector<note> &est, float shift_seconds, float zoom) {
@@ -184,3 +185,7 @@ void NotePlot::render(SDL_Renderer *gRenderer) {
     }
     SDL_RenderFillRect(gRenderer, &fillRect);
 }
+
+#else
+
+#endif

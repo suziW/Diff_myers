@@ -5,6 +5,7 @@
 #ifndef MSTT_PLOTCMP_H
 #define MSTT_PLOTCMP_H
 
+#ifdef PLOT
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -76,5 +77,17 @@ private:
     SDL_Rect textSquare = {0, 0, 0, 0};
     SDL_Surface *textSurface = nullptr;
 };
+
+
+#else
+
+#include <vector>
+#include "dataStruct/Note.h"
+
+class PlotCmp{
+public:
+    PlotCmp(vector<note> &ref, vector<note> &est, float shift_seconds, float zoom){}
+};
+#endif
 
 #endif //MSTT_PLOTCMP_H

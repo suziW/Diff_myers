@@ -9,21 +9,28 @@ string analyze(vector<vector<float>> onset, vector<vector<float>> frame, const s
 
     // est ns get from piano roll
     vector<note> est_ns = piano_roll.noteSequence();
+    nsAscendingSort(est_ns);
 
     // ref ns read from file
     json ref_json;
-    ifstream i("2.json");
+//    ifstream i("2.json");
+    ifstream i(file);
     i >> ref_json;
     vector<note> ref_ns = ref_json["notes"].get<vector<note>>();
+    nsAscendingSort(ref_ns);
 
     // cmp
-    MyersStandard<note> myers(ref_ns, est_ns);
+    MyersOverlapPoll myers(ref_ns, est_ns);
+    myers.process();
+
+
+    // return serialized results
     json diff = ref_ns; // correct or error ref notes
     for (auto bd:myers.bDiff){
         diff.emplace_back(est_ns[bd]); // add error est notes
     }
-    cout << myers.aDiff.size() << endl;
-    cout << myers.bDiff.size() << endl;
-    cout << myers.match.size() << endl;
+    cout << "aDiff size: " << myers.aDiff.size() << endl;
+    cout << "bDiff size: " << myers.bDiff.size() << endl;
+    cout << "match size: " << myers.match.size() << endl;
     return diff.dump(4);
 }

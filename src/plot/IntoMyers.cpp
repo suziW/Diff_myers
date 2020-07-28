@@ -2,6 +2,7 @@
 // Created by admin1 on 2020/7/20.
 //
 
+#ifdef PLOT
 #include "IntoMyers.h"
 
 #include <utility>
@@ -211,3 +212,7 @@ void IntoMyers::plot_tree(tree &tree, const string &info) {
     text = info;
     renderGrid();
 }
+
+#else
+
+#endif

@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <fstream>
 #include <iomanip>
-#include <SDL2/SDL.h>
 #include "dataStruct/Note.h"
 #include "json.hpp"
 #include "config.h"
@@ -20,12 +19,6 @@ using namespace std;
 using json = nlohmann::json; //json for morden c++
 
 int main() {
-    vector<vector<int>> t;
-    vector<int> u(3, 1);
-    vector<int> j(2, 1);
-    t.push_back(u);
-    t.push_back(j);
-
     // est ns get from piano roll
     vector<vector<float>> frame = readArrayFromeFile("frame.txt");
     vector<vector<float>> onset = readArrayFromeFile("onset.txt");
@@ -51,12 +44,4 @@ int main() {
     myers.process();
     PlotCmp plot(ref_ns_cut, est_ns_cut, 0, 1);
     cout << ref_ns.size() << "::" << est_ns.size() << endl;
-
-//    const char a[] = "ABAB";
-//    const char b[] = "CAABA";
-//    vector<char> a_(a, a + sizeof(a) - 1);
-//    vector<char> b_(b, b + sizeof(b) - 1);
-//    IntoMyers plot(a_, b_, 1);
-//    MyersStandard<char> myers(a_, b_, &plot);
-//    plot.trace(myers.traceCoords);
 }

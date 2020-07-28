@@ -124,9 +124,9 @@ void MyersOverlapPoll::shortest_edit() {
 void MyersOverlapPoll::deoverlap() {
     treeNode *current_node = &tr.all_nodes.back();
     while (current_node->parent != tr.root) {
-        note &ax = a.at(current_node->parent->c.x);
-        note &by = b.at(current_node->parent->c.y);
         if (current_node->c.diagonal_with(current_node->parent->c)) {
+            note &ax = a.at(current_node->parent->c.x);
+            note &by = b.at(current_node->parent->c.y);
             if (not (ax == by)) {
                 cout << "=====================================================" << endl;
                 cout << ax << by << endl;

@@ -16,8 +16,10 @@ bool note::operator==(const note &n) const {
 }
 
 void note::get_notation() {
-    if (pitch != -1) {
+    try {
         notation = PITCH2NOTATION.at(pitch);
+    } catch (exception e) {
+        cout << "Note.cpp:22, get notation found error: " << e.what() << endl;
     }
 }
 

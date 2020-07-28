@@ -5,6 +5,8 @@
 #ifndef MSTT_INTOMYERS_H
 #define MSTT_INTOMYERS_H
 
+#ifdef PLOT
+
 #include <vector>
 #include <string>
 #include <utility>
@@ -76,5 +78,29 @@ private:
     tree *tr = nullptr;
 };
 
+#else
+
+#include <vector>
+#include "dataStruct/Note.h"
+#include "dataStruct/Tree.h"
+
+class IntoMyers {
+public:
+    IntoMyers(vector<note> &ref, vector<note> &est, float zoom = 1) {}
+
+    IntoMyers(vector<char> &ref, vector<char> &est, float zoom = 1) {}
+
+    void block() {}
+
+    void trueBlock() {}
+
+    void next(coord, coord, const string &) {}
+
+    void plot_final_path(vector<coord> &) {}
+
+    void plot_tree(tree &, const string &) {}
+};
+
+#endif
 
 #endif //MSTT_INTOMYERS_H
