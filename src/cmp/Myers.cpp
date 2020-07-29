@@ -129,12 +129,12 @@ void MyersOverlapPoll::deoverlap() {
             note &by = b.at(current_node->parent->c.y);
             if (not (ax == by)) {
                 cout << "=====================================================" << endl;
-                cout << ax << by << endl;
+                cout << "ax: " << ax << endl << "by: " << by << endl;
                 for (auto i:overlap_pool[ax.start_time]) {
                     if (*i == by) {
-                        cout << i << "==" << *i << "|||" << &ax << "==" << ax << endl;
+                        cout << "exchange ==> ax:" << ax << endl <<
+                                "exchange ==> *i: " << *i << endl;
                         swap(*i, ax);
-                        cout << i << "==" << *i << "|||" << &ax << "==" << ax << endl;
                         break;
                     }
                 }

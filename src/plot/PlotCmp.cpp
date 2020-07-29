@@ -1,14 +1,15 @@
 //
 
 #ifdef PLOT
+
 #include "PlotCmp.h"
 
-PlotCmp::PlotCmp(vector<note> &ref, vector<note> &est, float shift_seconds, float zoom) {
+PlotCmp::PlotCmp(vector<note> &ref, vector<note> &est, float ref_shift_seconds, float est_shift_seconds, float zoom) {
     for (auto &n:ref) {
-        refNotePlots.emplace_back(n, shift_seconds, SCREEN_HEIGHT / 2 + fontSize, zoom);
+        refNotePlots.emplace_back(n, ref_shift_seconds, SCREEN_HEIGHT / 2 + fontSize, zoom);
     }
     for (auto &n:est) {
-        estNotePlots.emplace_back(n, shift_seconds, SCREEN_HEIGHT , zoom);
+        estNotePlots.emplace_back(n, est_shift_seconds, SCREEN_HEIGHT, zoom);
     }
 
     init();
@@ -20,7 +21,8 @@ void PlotCmp::init() {
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     TTF_Init();
 
-    window = SDL_CreateWindow("ref(up) est(down) note sequence compare", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+    window = SDL_CreateWindow("ref(up) est(down) note sequence compare", SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                               SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     font = TTF_OpenFont("etl14-unicode.bdf", fontSize);
@@ -125,7 +127,7 @@ PlotCmp::~PlotCmp() {
 }
 
 NotePlot::NotePlot(note &n, float shift_seconds, int y_base, float zoom) {
-    x = (int) ((n.start_time + shift_seconds) * 100);
+    x = (int) ((n.start_time + shift_seconds + 0.1) * 100);
     y = -(n.pitch - MIN_PITCH + 1) * 5 + y_base;
     color_status = n.status;
     info = to_string(n);

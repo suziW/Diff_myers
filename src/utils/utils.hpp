@@ -23,4 +23,6 @@ bool noteAscendingCmp(note &n1, note &n2);
 
 void nsAscendingSort(vector<note> &ns);
 
+void log_analyze(string file);
+
 #endif //MSTT_UTILS_HPP

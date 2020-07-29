@@ -15,12 +15,13 @@ bool note::operator==(const note &n) const {
     return pitch == n.pitch;
 }
 
-void note::get_notation() {
+string note::get_notation() {
     try {
         notation = PITCH2NOTATION.at(pitch);
     } catch (exception e) {
         cout << "Note.cpp:22, get notation found error: " << e.what() << endl;
     }
+    return notation;
 }
 
 void to_json(json &j, const note &n) {

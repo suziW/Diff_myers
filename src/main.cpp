@@ -19,29 +19,6 @@ using namespace std;
 using json = nlohmann::json; //json for morden c++
 
 int main() {
-    // est ns get from piano roll
-    vector<vector<float>> frame = readArrayFromeFile("frame.txt");
-    vector<vector<float>> onset = readArrayFromeFile("onset.txt");
-    pianoRoll piano_roll(onset, frame);
-    vector<note> est_ns = piano_roll.noteSequence();
-    nsAscendingSort(est_ns);
-    vector<note> est_ns_cut(est_ns.begin() + 12, est_ns.begin() + 32);
-//    vector<note> est_ns_cut = est_ns;
-
-    // ref ns read from file
-    json ref_json;
-    ifstream i("2.json");
-    i >> ref_json;
-    vector<note> ref_ns = ref_json["notes"].get<vector<note>>();
-    nsAscendingSort(ref_ns);
-    vector<note> ref_ns_cut(ref_ns.begin() + 7, ref_ns.begin() + 17);
-//    vector<note> ref_ns_cut = ref_ns;
-
-    // cmp
-    IntoMyers into(ref_ns_cut, est_ns_cut, 1);
-    MyersOverlapPoll myers(ref_ns_cut, est_ns_cut, &into);
-//    MyersTree myers(ref_ns_cut, est_ns_cut, &into);
-    myers.process();
-    PlotCmp plot(ref_ns_cut, est_ns_cut, 0, 1);
-    cout << ref_ns.size() << "::" << est_ns.size() << endl;
+    string file = "2020-07-29_09-56-09_650_萨拉班德舞曲";//2020-07-29_09-55-15_679_欢乐颂"; //2020-07-29_09-58-17_652_天空之城"; //2020-07-28_14-52-31_678_小步舞曲";
+    log_analyze(file);
 }

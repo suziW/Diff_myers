@@ -44,7 +44,7 @@ private:
 // zoom: zoom in when zoom < 1, zoom out when zoom > 1
 class PlotCmp {
 public:
-    PlotCmp(vector<note> &ref, vector<note> &est, float shift_seconds, float zoom);
+    PlotCmp(vector<note> &ref, vector<note> &est, float ref_shift_seconds, float est_shift_seconds, float zoom);
 
     ~PlotCmp();
 

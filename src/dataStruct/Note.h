@@ -41,7 +41,7 @@ public:
 
     bool operator==(const note &) const;
 
-    void get_notation();
+    string get_notation();
 };
 
 void to_json(json &, const note &);
