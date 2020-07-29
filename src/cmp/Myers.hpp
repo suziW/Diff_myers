@@ -225,4 +225,9 @@ public:
     bool is_match_in_poll(note &ax, note &by);
 };
 
+class MyersTrim: public MyersOverlapPoll{
+public:
+    MyersTrim(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr): MyersOverlapPoll(a, b, plot){}
+};
+
 #endif //MSTT_MYERS_HCC

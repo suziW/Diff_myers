@@ -127,13 +127,13 @@ void MyersOverlapPoll::deoverlap() {
         if (current_node->c.diagonal_with(current_node->parent->c)) {
             note &ax = a.at(current_node->parent->c.x);
             note &by = b.at(current_node->parent->c.y);
-            if (not (ax == by)) {
+            if (not(ax == by)) {
                 cout << "=====================================================" << endl;
                 cout << "ax: " << ax << endl << "by: " << by << endl;
                 for (auto i:overlap_pool[ax.start_time]) {
                     if (*i == by) {
                         cout << "exchange ==> ax:" << ax << endl <<
-                                "exchange ==> *i: " << *i << endl;
+                             "exchange ==> *i: " << *i << endl;
                         swap(*i, ax);
                         break;
                     }
@@ -158,6 +158,19 @@ void MyersOverlapPoll::get_overlap_pool() {
 }
 
 bool MyersOverlapPoll::is_match_in_poll(note &ax, note &by) {
+    // track back until last match a is not in the same poll with ax
+    treeNode *current_node = &tr.all_nodes.back();
+    while (current_node->parent != tr.root) {
+        if (current_node->c.diagonal_with(current_node->parent->c)) {
+            if (a.at(current_node->parent->c.x).start_time == ax.start_time) { // if in the same poll
+                if (b.at(current_node->parent->c.y).pitch == by.pitch) { // if the pitch of last match b equal pitch of by
+                    return false;
+                }
+            } else { break; }
+        }
+        current_node = current_node->parent;
+    }
+
     for (auto i:overlap_pool[ax.start_time]) {
         if (i->pitch == by.pitch) { return true; }
     }

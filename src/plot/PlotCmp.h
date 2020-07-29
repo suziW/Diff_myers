@@ -61,7 +61,7 @@ public:
     void close();
 
 private:
-    int SCREEN_WIDTH = 1800;
+    int SCREEN_WIDTH = 3600;
     int SCREEN_HEIGHT = 1000;
 
     vector<NotePlot> refNotePlots;

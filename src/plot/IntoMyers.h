@@ -18,7 +18,7 @@
 #include "dataStruct/Note.h"
 #include "dataStruct/Tree.h"
 
-
+// zoom = 1, can draw about 43 notes vertical
 class IntoMyers {
 public:
     IntoMyers(vector<note> &ref, vector<note> &est, float zoom = 1);
@@ -52,8 +52,8 @@ public:
 private:
     // window setting
     bool quit = false;
-    int SCREEN_WIDTH = 1800;
-    int SCREEN_HEIGHT = 1000;
+    int SCREEN_WIDTH = 1600;
+    int SCREEN_HEIGHT = 2000;
     SDL_Window *window = nullptr;
     SDL_Renderer *renderer = nullptr;
     TTF_Font *font = nullptr;

@@ -40,10 +40,11 @@ void to_json(json &j, const note &n) {
 }
 
 void from_json(const json &j, note &n) {
-//    n = note(j.at("pitch"), j.at("onset"));
     j.at("pitch").get_to(n.pitch);
-    j.at("start_time").get_to(n.start_time);
-    j.at("duration").get_to(n.duration);
+//    j.at("start_time").get_to(n.start_time);
+    n.start_time = float(j.at("start_time")) * 4 *60 / float(j.at("measure_bpm"));
+//    j.at("duration").get_to(n.duration);
+    n.duration = float(j.at("duration")) * 4 *60 / float(j.at("measure_bpm"));
     j.at("id").get_to(n.id);
     j.at("osmd_id").get_to(n.osmd_id);
     j.at("measure_bpm").get_to(n.measure_bpm);

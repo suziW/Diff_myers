@@ -69,7 +69,7 @@ void nsAscendingSort(vector<note> &ns) {
     }
 }
 
-void log_analyze(string file) {
+void logAnalyze(string file) {
     string onsetfile = file + "/onset.txt";
     string framefile = file + "/frame.txt";
     string jsonfile = file + "/reference.json";
@@ -93,16 +93,20 @@ void log_analyze(string file) {
     vector<note> ref_ns_cut = ref_ns;
 
     // cmp
-//    IntoMyers into(ref_ns_cut, est_ns_cut, 1);
-    MyersOverlapPoll myers(ref_ns_cut, est_ns_cut);
+    IntoMyers into(ref_ns_cut, est_ns_cut, 0.3);
+    MyersOverlapPoll myers(ref_ns_cut, est_ns_cut, &into);
     myers.process();
-    for (auto &k: myers.match){
-        if (not (ref_ns_cut.at(k.x) == est_ns_cut.at(k.y))){
-            cout << "======================================" << endl;
-            cout << BOLDRED << "a: " << ref_ns_cut.at(k.x) << endl
-                            << "b: " << est_ns_cut.at(k.y) << endl;
-        }
-    }
+    ifAllMatchCorrect(ref_ns_cut, est_ns_cut, myers.match);
     PlotCmp plot(ref_ns_cut, est_ns_cut, -ref_ns_cut[0].start_time, -est_ns_cut[0].start_time, 0.5);
     cout << ref_ns.size() << "::" << est_ns.size() << endl;
+}
+
+void ifAllMatchCorrect(vector<note> &ref_ns, vector<note> &est_ns, vector<coord> &match) {
+    for (auto &i: match){
+        if (not (ref_ns.at(i.x) == est_ns.at(i.y))){
+            cout << BOLDRED << "======================================" << endl;
+            cout << "a: " << ref_ns.at(i.x) << endl
+                 << "b: " << est_ns.at(i.y) << RESET << endl;
+        }
+    }
 }
