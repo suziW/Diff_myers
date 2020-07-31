@@ -183,7 +183,7 @@ void NotePlot::render(SDL_Renderer *gRenderer) {
     } else if (color_status == 2) { // 2 means extra, color green
         SDL_SetRenderDrawColor(gRenderer, 0x00, 0xFF, 0x00, 0xFF);
     } else {
-        throw "color status error";
+        SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xFF);
     }
     SDL_RenderFillRect(gRenderer, &fillRect);
 }

@@ -86,7 +86,7 @@ private:
 
 class PlotCmp{
 public:
-    PlotCmp(vector<note> &ref, vector<note> &est, float shift_seconds, float zoom){}
+    PlotCmp(vector<note> &ref, vector<note> &est, float ref_shift_seconds, float est_shift_seconds, float zoom){}
 };
 #endif
 

@@ -25,6 +25,8 @@ public:
     bool vertical_with(coord &n) const;
 
     bool diagonal_with(coord &n) const;
+
+    int sum() const;
 };
 
 string to_string(coord &c);

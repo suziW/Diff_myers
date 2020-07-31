@@ -37,10 +37,14 @@ public:
     vector<treeNode *> leaves; // TODO:change vector to heap or priority queue later
     int current_d = -1;
     list<treeNode> all_nodes;
+    int max_k = -1;
+    int min_k = -1;
 
     int get_k_leave_x(int k);
 
     void emplace_back(const treeNode &node, int parent_leave_num);
+
+    void trim(int reserve=15);
 
 };
 

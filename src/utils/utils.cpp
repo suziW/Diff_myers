@@ -96,12 +96,12 @@ void logAnalyze(string file) {
     IntoMyers into(ref_ns_cut, est_ns_cut, 0.3);
     MyersOverlapPoll myers(ref_ns_cut, est_ns_cut, &into);
     myers.process();
-    ifAllMatchCorrect(ref_ns_cut, est_ns_cut, myers.match);
-    PlotCmp plot(ref_ns_cut, est_ns_cut, -ref_ns_cut[0].start_time, -est_ns_cut[0].start_time, 0.5);
+    isAllMatchCorrect(ref_ns_cut, est_ns_cut, myers.match);
+    PlotCmp plot(ref_ns_cut, est_ns_cut, -ref_ns_cut[0].start_time, -est_ns_cut[0].start_time, 0.6);
     cout << ref_ns.size() << "::" << est_ns.size() << endl;
 }
 
-void ifAllMatchCorrect(vector<note> &ref_ns, vector<note> &est_ns, vector<coord> &match) {
+void isAllMatchCorrect(vector<note> &ref_ns, vector<note> &est_ns, vector<coord> &match) {
     for (auto &i: match){
         if (not (ref_ns.at(i.x) == est_ns.at(i.y))){
             cout << BOLDRED << "======================================" << endl;

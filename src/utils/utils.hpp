@@ -25,6 +25,6 @@ void nsAscendingSort(vector<note> &ns);
 
 void logAnalyze(string file);
 
-void ifAllMatchCorrect(vector<note> &ref_ns, vector<note> &est_ns, vector<coord> &match);
+void isAllMatchCorrect(vector<note> &ref_ns, vector<note> &est_ns, vector<coord> &match);
 
 #endif //MSTT_UTILS_HPP

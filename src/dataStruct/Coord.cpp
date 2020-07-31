@@ -21,6 +21,10 @@ bool coord::diagonal_with(coord &n) const {
     return (x == n.x - 1 and y == n.y - 1) or (x == n.x + 1 and y == n.y + 1);
 }
 
+int coord::sum() const {
+    return x + y;
+}
+
 string to_string(coord &c) {
     return "[coord: x=" + to_string(c.x) + ", y=" + to_string(c.y) + "] ";
 }

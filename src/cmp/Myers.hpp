@@ -208,7 +208,7 @@ public:
     tree tr;
 };
 
-class MyersOverlapPoll: public MyersTree {
+class MyersOverlapPoll : public MyersTree {
 public:
     MyersOverlapPoll(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersTree(a, b, plot) {}
 
@@ -225,9 +225,11 @@ public:
     bool is_match_in_poll(note &ax, note &by);
 };
 
-class MyersTrim: public MyersOverlapPoll{
+class MyersTrim : public MyersOverlapPoll {
 public:
-    MyersTrim(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr): MyersOverlapPoll(a, b, plot){}
+    MyersTrim(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersOverlapPoll(a, b, plot) {}
+
+    void shortest_edit() override;
 };
 
 #endif //MSTT_MYERS_HCC
