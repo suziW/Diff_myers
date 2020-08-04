@@ -5,8 +5,8 @@
 #include "Tree.h"
 #include "utils/utils.hpp"
 
-void tree::init(int max_leaves, const treeNode &rootNode) {
-    all_nodes.emplace_back(rootNode);
+void tree::init(int max_leaves, const treeNode &root_node) {
+    all_nodes.emplace_back(root_node);
     root = &all_nodes.back();
     leaves.resize(max_leaves, nullptr);
     leaves[1] = root;
@@ -43,7 +43,7 @@ void tree::trim(int reserve) {
     int max_sum = 0;
     for (int i = min_k; i < max_k; i++) {
         if (at(leaves, i)) {
-            if (at(leaves, i)->c.sum() > max_sum){
+            if (at(leaves, i)->c.sum() > max_sum) {
                 max_sum = at(leaves, i)->c.sum();
                 longest_k = i;
             }
@@ -57,4 +57,11 @@ void tree::trim(int reserve) {
     while (!at(leaves, min_k + 1)) {
         min_k++;
     }
+}
+
+void tree::update(int max_leaves) {
+    while (all_nodes.back().d == current_d and &all_nodes.back() != root) {
+        all_nodes.pop_back();
+    }
+    leaves.insert(leaves.begin()+leaves.size()/2, max_leaves - leaves.size(), nullptr);
 }

@@ -232,4 +232,29 @@ public:
     void shortest_edit() override;
 };
 
+class MyersEarlyStop : public MyersTrim {
+public:
+    MyersEarlyStop(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersTrim(a, b, plot) {}
+
+    void shortest_edit() override;
+};
+
+class MyersRealTime : public MyersEarlyStop {
+public:
+    MyersRealTime(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersEarlyStop(a, b, plot) {}
+
+    void shortest_edit() override;
+
+    void init();
+
+    string update();
+
+    void diff() override;
+
+    void deoverlap();
+
+    int last_d = -1;
+    string result;
+};
+
 #endif //MSTT_MYERS_HCC

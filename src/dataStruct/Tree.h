@@ -31,7 +31,7 @@ class tree {
 public:
     tree() = default;;
 
-    void init(int max_leaves, const treeNode &rootNode);
+    void init(int max_leaves, const treeNode &root_node);
 
     treeNode *root = nullptr;
     vector<treeNode *> leaves; // TODO:change vector to heap or priority queue later
@@ -44,7 +44,9 @@ public:
 
     void emplace_back(const treeNode &node, int parent_leave_num);
 
-    void trim(int reserve=15);
+    void trim(int reserve = 15);
+
+    void update(int max_leaves);
 
 };
 
