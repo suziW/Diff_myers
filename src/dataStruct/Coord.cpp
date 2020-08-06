@@ -25,6 +25,14 @@ int coord::sum() const {
     return x + y;
 }
 
+bool coord::operator<(const coord &c) const {
+    return !(x >= c.x and y >=c.y);
+}
+
+bool coord::operator==(const coord &c) const {
+    return (x==c.x and y==c.y);
+}
+
 string to_string(coord &c) {
     return "[coord: x=" + to_string(c.x) + ", y=" + to_string(c.y) + "] ";
 }

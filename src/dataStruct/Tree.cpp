@@ -1,9 +1,17 @@
 //
-// Created by admin1 on 2020/7/22.
-//
 
 #include "Tree.h"
 #include "utils/utils.hpp"
+
+//
+// Created by admin1 on 2020/7/22.
+bool treeNode::on_node_trace(treeNode *n) const {
+    treeNode *tmp = n;
+    while (tmp != nullptr and c < tmp->c){
+        tmp = tmp->parent;
+    }
+    return c == tmp->c;
+}
 
 void tree::init(int max_leaves, const treeNode &root_node) {
     all_nodes.emplace_back(root_node);
@@ -50,18 +58,25 @@ void tree::trim(int reserve) {
         }
     }
     max_k = longest_k + reserve;
-    while (!at(leaves, max_k - 1)) {
+    while (max_k >= int(leaves.size()) or !at(leaves, max_k - 1)) {
         max_k--;
     }
     min_k = longest_k - reserve;
-    while (!at(leaves, min_k + 1)) {
+    while (min_k <= -int(leaves.size()) or !at(leaves, min_k + 1)) {
         min_k++;
     }
 }
 
-void tree::update(int max_leaves) {
+treeNode* tree::update(int max_leaves) {
+    treeNode *last_node = &all_nodes.back();
+    while (last_node->d == current_d and last_node != root){
+        last_node = last_node->parent;
+    }
+
     while (all_nodes.back().d == current_d and &all_nodes.back() != root) {
         all_nodes.pop_back();
     }
     leaves.insert(leaves.begin()+leaves.size()/2, max_leaves - leaves.size(), nullptr);
+
+    return last_node;
 }

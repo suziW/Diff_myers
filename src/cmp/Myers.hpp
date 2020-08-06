@@ -214,7 +214,7 @@ public:
 
     void shortest_edit() override;
 
-    void deoverlap();
+    virtual void deoverlap();
 
     void process() override;
 
@@ -241,7 +241,9 @@ public:
 
 class MyersRealTime : public MyersEarlyStop {
 public:
-    MyersRealTime(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersEarlyStop(a, b, plot) {}
+    MyersRealTime(vector<note> &a, vector<note> &b, IntoMyers *plot = nullptr) : MyersEarlyStop(a, b, plot) {
+        init();
+    }
 
     void shortest_edit() override;
 
@@ -251,9 +253,9 @@ public:
 
     void diff() override;
 
-    void deoverlap();
+    void deoverlap() override;
 
-    int last_d = -1;
+    treeNode *last_node = nullptr;
     string result;
 };
 

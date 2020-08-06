@@ -78,7 +78,7 @@ void logAnalyze(string file) {
     vector<vector<float>> onset = readArrayFromeFile(onsetfile);
     vector<vector<float>> frame = readArrayFromeFile(framefile);
     pianoRoll piano_roll(onset, frame);
-    vector<note> est_ns = piano_roll.noteSequence();
+    vector<note> est_ns = piano_roll.ns;
     nsAscendingSort(est_ns);
 //    vector<note> est_ns_cut(est_ns.begin() + 283, est_ns.begin() + 400);
     vector<note> est_ns_cut = est_ns;

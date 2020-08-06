@@ -11,7 +11,7 @@
 #include "json.hpp"
 #include "config.h"
 #include "dataStruct/PianoRoll.h"
-#include "cmp/Analyze.h"
+#include "cmp/Cmp.h"
 #include "plot/PlotCmp.h"
 #include "plot/IntoMyers.h"
 #include <ctime>
@@ -31,35 +31,49 @@ int main() {
     string framefile = file + "/frame.txt";
     string jsonfile = file + "/reference.json";
 
-    // est ns parsed from onset frame
+    CmpRealTime progress;
+    progress.init(jsonfile);
+
     vector<vector<float>> onset = readArrayFromeFile(onsetfile);
     vector<vector<float>> frame = readArrayFromeFile(framefile);
-    pianoRoll piano_roll(onset, frame);
-    vector<note> est_ns = piano_roll.noteSequence();
-    nsAscendingSort(est_ns);
-    vector<note> est_ns_cut(est_ns.begin(), est_ns.begin());
-//    vector<note> est_ns_cut = est_ns;
-
-    // ref ns read from file
-    json ref_json;
-    ifstream i(jsonfile);
-    i >> ref_json;
-    vector<note> ref_ns = ref_json["notes"].get<vector<note>>();
-    nsAscendingSort(ref_ns);
-//    vector<note> ref_ns_cut(ref_ns.begin() + 36, ref_ns.begin() + 99);
-    vector<note> ref_ns_cut = ref_ns;
-
-    // cmp
-    IntoMyers into(ref_ns_cut, est_ns, 0.2);
-    MyersRealTime myers(ref_ns_cut, est_ns_cut, &into);
-    myers.init();
-    for (int k = 0; k < 11; k++) {
-        est_ns_cut.insert(est_ns_cut.end(), est_ns.begin() + k * 10, est_ns.begin() + k * 10 + 10);
-        cout << BLUE << myers.update();
-//        MyersTrim myers(ref_ns_cut, est_ns_cut);
+    for (int k = 0; k < 102; k++){
+        cout << RESET << "=============================================================================" << endl;
+        vector<vector<float>> onset_cut(onset.begin() + k * 30, onset.begin() + k * 30 + 30);
+        vector<vector<float>> frame_cut(frame.begin() + k * 30, frame.begin() + k * 30 + 30);
+        cout << BLUE << progress.update(onset_cut, frame_cut) << endl;
     }
+//    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    // ref ns read from file
+//    json ref_json;
+//    ifstream i(jsonfile);
+//    i >> ref_json;
+//    vector<note> ref_ns = ref_json["notes"].get<vector<note>>();
+//    nsAscendingSort(ref_ns);
+//    vector<note> ref_ns_cut(ref_ns.begin(), ref_ns.begin() + 60);
+////    vector<note> ref_ns_cut = ref_ns;
+//
+//    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//    // est ns parsed from onset frame
+//    vector<vector<float>> onset = readArrayFromeFile(onsetfile);
+//    vector<vector<float>> frame = readArrayFromeFile(framefile);
+//    pianoRoll _piano_roll(onset, frame);
+//    vector<note> est_ns(_piano_roll.ns.begin(), _piano_roll.ns.begin()+84);
+//
+//    pianoRoll piano_roll;
+//    vector<note> &est_ns_cut = piano_roll.ns;
+//
+//    IntoMyers into(ref_ns_cut, est_ns, 0.2);
+//    MyersRealTime myers(ref_ns_cut, est_ns_cut, &into);
+//    for (int k = 0; k < 17; k++) {
+//        cout << "=============================================================================" << endl;
+//        vector<vector<float>> onset_cut(onset.begin() + k * 30, onset.begin() + k * 30 + 30);
+//        vector<vector<float>> frame_cut(frame.begin() + k * 30, frame.begin() + k * 30 + 30);
+//        piano_roll.update(onset_cut, frame_cut);
+//        cout << BLUE << myers.update() << endl;
+//    }
+
     end = clock();
     cout << YELLOW << "=====================time: " << float(end - start) / CLOCKS_PER_SEC << endl;
-    PlotCmp plot(ref_ns_cut, est_ns_cut, -ref_ns_cut[0].start_time, -est_ns_cut[0].start_time, 0.5);
-    cout << ref_ns.size() << "::" << est_ns.size() << endl;
+//    PlotCmp plot(ref_ns_cut, est_ns_cut, -ref_ns_cut[0].start_time, -est_ns_cut[0].start_time, 0.5);
+//    cout << ref_ns.size() << "::" << est_ns.size() << endl;
 }

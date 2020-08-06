@@ -270,8 +270,7 @@ void MyersRealTime::init() {
 }
 
 string MyersRealTime::update() {
-    last_d = tr.current_d;
-    tr.update(2 * (a.size() + b.size()) + 1);
+    last_node = tr.update(2 * (a.size() + b.size()) + 1);
     shortest_edit();
     deoverlap();
     diff();
@@ -287,7 +286,7 @@ void MyersRealTime::shortest_edit() {
     int m = b.size();
     int maxd = m + n;
 
-    for (d = last_d; d <= maxd; d++) {
+    for (d = tr.current_d; d <= maxd; d++) {
         tr.current_d = d;
         for (k = d; k >= -d; k -= 2) {
             if (k < tr.min_k or k > tr.max_k) { continue; }
@@ -320,9 +319,8 @@ void MyersRealTime::shortest_edit() {
 }
 
 void MyersRealTime::deoverlap() {
-    cout << "==========================" << endl;
     treeNode *current_node = &tr.all_nodes.back();
-    while (current_node->parent and current_node->parent != tr.root and current_node->parent->d >= last_d - 1) {
+    while (current_node->parent and current_node->parent != tr.root and !current_node->on_node_trace(last_node)) {
         if (current_node->c.diagonal_with(current_node->parent->c)) {
             note &ax = a.at(current_node->parent->c.x);
             note &by = b.at(current_node->parent->c.y);
@@ -344,20 +342,20 @@ void MyersRealTime::deoverlap() {
 }
 
 void MyersRealTime::diff() {
-    vector<note> result_note;
+    json result_json;
     treeNode *current_node = &tr.all_nodes.back();
-    while (current_node->parent and current_node->parent != tr.root and current_node->parent->d >= last_d - 1) {
+    while (current_node->parent and current_node->parent != tr.root and !current_node->on_node_trace(last_node)) {
         if (current_node->c.x <= a.size() and current_node->c.y <= b.size()) {
             if (current_node->c.horizontal_with(current_node->parent->c)) {
                 aDiff.emplace_back(current_node->parent->c.x);
                 a.at(aDiff.back()).status = 1;
-                result_note.emplace_back(a.at(aDiff.back()));
+                result_json.emplace_back(a.at(aDiff.back()));
                 cout << RED << "--- " << a.at(aDiff.back()) << endl;
             } else if (current_node->c.vertical_with(current_node->parent->c)) {
                 bDiff.emplace_back(current_node->parent->c.y);
                 b.at(bDiff.back()).status = 2;
                 b.at(bDiff.back()).osmd_id = a.at(max(0, current_node->c.x - 1)).osmd_id;
-                result_note.emplace_back(b.at(bDiff.back()));
+                result_json.emplace_back(b.at(bDiff.back()));
                 cout << GREEN << "+++ " << b.at(bDiff.back()) << endl;
             } else if (current_node->c.diagonal_with(current_node->parent->c)) {
                 match.emplace_back(current_node->parent->c);
@@ -367,13 +365,12 @@ void MyersRealTime::diff() {
                 b.at(match.back().y).status = 0;
                 b.at(match.back().y).rhythm = 0;
                 b.at(match.back().y).match_id = a.at(match.back().x).id;
-                result_note.emplace_back(a.at(match.back().x));
+                result_json.emplace_back(a.at(match.back().x));
                 cout << RESET << "    " << a.at(match.back().x) << endl;
             }
         }
         current_node = current_node->parent;
     }
-    cout << RED << "count: " << result_note.size() << endl;
-    json result_json = result_note;
+    cout << RESET << "    count: " << result_json.size() << endl;
     result = result_json.dump(4);
 }

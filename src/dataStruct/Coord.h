@@ -20,6 +20,10 @@ public:
 //    int &b = y;
     friend ostream &operator<<(ostream &, coord &);
 
+    bool operator<(const coord &c) const; // up left one is smaller
+
+    bool operator==(const coord &c) const; // up left one is bigger
+
     bool horizontal_with(coord &n) const;
 
     bool vertical_with(coord &n) const;

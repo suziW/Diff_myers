@@ -25,6 +25,8 @@ public:
     treeNode *right = nullptr;
     treeNode **sibling = nullptr;
     treeNode *parent = nullptr;
+
+    bool on_node_trace(treeNode *n) const;
 };
 
 class tree {
@@ -46,7 +48,7 @@ public:
 
     void trim(int reserve = 15);
 
-    void update(int max_leaves);
+    treeNode* update(int max_leaves);
 
 };
 
